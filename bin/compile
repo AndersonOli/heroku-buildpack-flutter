@@ -66,8 +66,11 @@ else
   flutter/bin/flutter channel beta | indent
 fi
 
-print "Running flutter upgrade command"
-flutter/bin/flutter upgrade --quiet | indent
+# Check FLUTTER_UPGRADE var to run upgrade command.
+if [ "$FLUTTER_UPGRADE" == true ]; then
+  print "Running flutter upgrade command"
+  flutter/bin/flutter upgrade --quiet | indent
+fi
 
 print "Enabling Web support"
 flutter/bin/flutter config --enable-web --quiet | indent
