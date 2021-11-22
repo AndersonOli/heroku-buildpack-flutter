@@ -53,19 +53,21 @@ if [ -n "$FLUTTER_VERSION" ]; then
   # Check if the FLUTTER_VERSION is the same with the installed one.
   if [ "$FLUTTER_VERSION" != "$FLUTTER_INSTALLED_VERSION" ]; then
     print "Installing Flutter SDK version : $FLUTTER_VERSION"
-    flutter/bin/flutter version $FLUTTER_VERSION --quiet | indent
+    flutter/bin/flutter downgrade $FLUTTER_VERSION --quiet | indent
   fi
   rm flutter.json
+fi 
 
-else
-
-  print "Running flutter upgrade command"
-  if [ "$channel" != "stable" ]; then
-    flutter/bin/flutter channel stable | indent
-  fi
-
-  flutter/bin/flutter upgrade --quiet | indent
+# Set channel from variables.
+print "Setting $FLUTTER_CHANNEL channel"
+if [ -n "$FLUTTER_CHANNEL" ]; then
+  flutter/bin/flutter channel $FLUTTER_CHANNEL | indent
+else 
+  flutter/bin/flutter channel beta | indent
 fi
+
+print "Running flutter upgrade command"
+flutter/bin/flutter upgrade --quiet | indent
 
 print "Enabling Web support"
 flutter/bin/flutter config --enable-web --quiet | indent
